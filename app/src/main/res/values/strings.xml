@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Neuron</string>
+
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="repeatPassword">Repeat password</string>
+    <string name="register">Register Here</string>
+    <string name="signin">Sign In</string>
+    <string name="signup">SIGN UP</string>
+    <string name="signup_with_google">Sign up with Google</string>
+    <string name="or">OR</string>
+    <string name="withSocialMedia">WITH SOCIAL MEDIA</string>
+
+    <string name="empty"></string>
+    <string name="registration_default_username_not_long_enough">At least 3 characters are required!</string>
+    <string name="registration_default_username_already_in_use">Username is already taken!</string>
+    <string name="registration_default_email_already_in_use">Email is already taken!</string>
+    <string name="registration_default_email_does_not_exist">Email does not exist! Try again, please.</string>
+    <string name="registration_default_password_too_short">Password is too short!</string>
+    <string name="registration_default_passwords_dont_match">The passwords do not match!</string>
+    <string name="signup_failed">Sign up failed because of: </string>
+
+    <string name="noContentDescription">-</string>
+
+    <string name="default_web_client_id_test">218545925409-lnfb36a8jldbihpbbhbifnmv81dm3a1r.apps.googleusercontent.com</string>
+</resources>
