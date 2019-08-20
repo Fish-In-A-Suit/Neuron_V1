@@ -11,6 +11,7 @@
     <string name="signup_with_google">Sign up with Google</string>
     <string name="or">OR</string>
     <string name="withSocialMedia">WITH SOCIAL MEDIA</string>
+    <string name="welcome_comma">Welcome,</string>
 
     <string name="empty"></string>
     <string name="registration_default_username_not_long_enough">At least 3 characters are required!</string>
@@ -20,6 +21,8 @@
     <string name="registration_default_password_too_short">Password is too short!</string>
     <string name="registration_default_passwords_dont_match">The passwords do not match!</string>
     <string name="signup_failed">Sign up failed because of: </string>
+
+    <string name="AGSU_subgreetings">You are just a few clicks away from signing up to Neuron!</string>
 
     <string name="noContentDescription">-</string>
 

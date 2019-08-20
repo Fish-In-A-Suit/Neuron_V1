@@ -30,4 +30,19 @@ public class ActivityTools {
         intent.putExtra(parcelableKey, p);
         currentContext.startActivity(intent);
     }
+
+    /**
+     * This method is used for starting AfterGoogleSignUpActivity for first-time google sign-up-"ees"
+     * @param currentContext
+     * @param target
+     * @param parcelableKey
+     * @param p
+     * @param name
+     */
+    public static void startNewActivity(Context currentContext, Class target, String parcelableKey, Parcelable p, String name) {
+        Intent intent = new Intent(currentContext, target);
+        intent.putExtra(parcelableKey, p);
+        intent.putExtra(Constants.PARCELABLE_KEY_NAME, name);
+        currentContext.startActivity(intent);
+    }
 }

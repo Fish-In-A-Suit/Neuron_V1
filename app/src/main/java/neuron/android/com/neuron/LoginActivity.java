@@ -1,10 +1,16 @@
 package neuron.android.com.neuron;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import neuron.android.com.neuron.database.FirestoreManager;
+import neuron.android.com.neuron.registration.googleRegistration.GoogleSignInStateManager;
 import neuron.android.com.neuron.tools.ActivityTools;
 
 public class LoginActivity extends AppCompatActivity {
@@ -29,6 +35,20 @@ public class LoginActivity extends AppCompatActivity {
             ActivityTools.startNewActivity(this, MainActivity.class);
         }
         */
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //todo: remove this later
+        //signs out the current google sign in client
+        GoogleSignInStateManager.getGoogleSignInClient().signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                System.out.println("[Neuron.LoginActivity.onDestroy]: Successfully signed out google sign in client");
+            }
+        });
     }
 
     /**

@@ -2,7 +2,7 @@ package neuron.android.com.neuron.core;
 
 public class Constants {
     public static final int MIN_USERNAME_LENGTH = 3;
-    public static final int MIN_PASSWORD_LENGTH = 5;
+    public static final int MIN_PASSWORD_LENGTH = 6;
 
     public static final String FIRESTORE_COLLECTION_USED_USERNAMES = "used_usernames";
     public static final String FIRESTORE_COLLECTION_USED_EMAILS = "used_emails";
@@ -16,4 +16,5 @@ public class Constants {
     public static final int request_code_google_sign_in = 100;
 
     public static final String PARCELABLE_KEY_INCOMPLETE_DATABASE_USER = "incomplete_db_user";
+    public static final String PARCELABLE_KEY_NAME = "name";
 }

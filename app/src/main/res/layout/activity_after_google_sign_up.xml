@@ -4,6 +4,341 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_login_activity"
     tools:context=".AfterGoogleSignUpActivity">
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.06999999">
+
+        <TextView
+            android:id="@+id/AGSU_greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/comfortaa_bold"
+            android:text="@string/welcome_comma"
+            android:textColor="@color/primary"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/AGSU_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/comfortaa_bold"
+            android:text="Name_Here"
+            android:textColor="@color/primary"
+            android:textSize="28sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/AGSU_root_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AGSU_subgreeting"
+        app:layout_constraintVertical_bias="0.100000024">
+
+        <LinearLayout
+            android:id="@+id/AGSU_username_field_linear_layout_root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_heading_neuron"
+            app:layout_constraintVertical_bias="0.0">
+
+            <LinearLayout
+                android:id="@+id/AGSU_username_field_linear_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/background_login_field"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="12dp"
+                    android:contentDescription="@string/noContentDescription"
+                    android:src="@drawable/ic_login_username"
+                    android:tint="@color/secondary" />
+
+                <EditText
+                    android:id="@+id/AGSU_username_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ems="10"
+                    android:fontFamily="@font/roboto_light"
+                    android:hint="@string/username"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:textColor="@color/login_text_color"
+                    android:textColorHint="@color/login_text_color"
+                    android:textSize="16sp"
+                    tools:ignore="Autofill" />
+
+                <ImageView
+                    android:id="@+id/AGSU_username_error_view"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight=".0001"
+                    android:src="@drawable/ic_error_round_outlined"
+                    android:tint="@color/error"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/AGSU_username_error_report_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/error"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/AGSU_password_field_linear_layout_root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_heading_neuron"
+            app:layout_constraintVertical_bias="0.0">
+
+            <LinearLayout
+                android:id="@+id/AGSU_password_field_linear_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/background_login_field"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/AGSU_password_icon"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="12dp"
+                    android:contentDescription="@string/noContentDescription"
+                    android:src="@drawable/ic_lock_outlined"
+                    android:tint="@color/secondary" />
+
+                <EditText
+                    android:id="@+id/AGSU_password_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ems="10"
+                    android:fontFamily="@font/roboto_light"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColor="@color/login_text_color"
+                    android:textColorHint="@color/login_text_color"
+                    android:textSize="16sp"
+                    tools:ignore="Autofill" />
+
+                <ImageView
+                    android:id="@+id/AGSU_password_error_view"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight=".0001"
+                    android:src="@drawable/ic_error_round_outlined"
+                    android:tint="@color/error"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/AGSU_password_error_report_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/error"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/AGSU_repeat_password_field_linear_layout_root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_heading_neuron"
+            app:layout_constraintVertical_bias="0.0">
+
+            <LinearLayout
+                android:id="@+id/AGSU_repeat_password_field_linear_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/background_login_field"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="12dp"
+                    android:contentDescription="@string/noContentDescription"
+                    android:src="@drawable/ic_lock_outlined"
+                    android:tint="@color/secondary" />
+
+                <EditText
+                    android:id="@+id/AGSU_repeat_password_edit_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="12dp"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:ems="10"
+                    android:fontFamily="@font/roboto_light"
+                    android:hint="@string/repeatPassword"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:textColor="@color/login_text_color"
+                    android:textColorHint="@color/login_text_color"
+                    android:textSize="16sp"
+                    tools:ignore="Autofill" />
+
+                <ImageView
+                    android:id="@+id/AGSU_repeat_password_error_view"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight=".0001"
+                    android:src="@drawable/ic_error_round_outlined"
+                    android:tint="@color/error"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/AGSU_repeat_password_error_report_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/error"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/AGSU_sign_up_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/background_login_sign_in_button"
+            android:enabled="false"
+            android:fontFamily="@font/comfortaa"
+            android:onClick="onClick_AGSU_signUp"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
+            android:text="@string/signup"
+            android:textColor="@color/login_signin_button_text_color"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_password_field_linear_layout"
+            app:layout_constraintVertical_bias="0.0" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/AGSU_subgreeting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/AGSU_subgreetings"
+        android:textColor="@color/background_light"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.01"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="150dp"
+        android:layout_height="151dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.04000002"
+        app:srcCompat="@drawable/ic_neuron_logo" />
 </androidx.constraintlayout.widget.ConstraintLayout>

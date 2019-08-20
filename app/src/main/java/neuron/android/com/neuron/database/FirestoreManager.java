@@ -75,6 +75,10 @@ public class FirestoreManager {
         addUsedEmail(email);
     }
 
+    public static void saveUserData(DatabaseUser user) {
+        saveUserData(user.getUsername(), user.getEmail(), user.getId());
+    }
+
     /**
      * Adds a new used username to the firestore used_usernames collection
      * @param username

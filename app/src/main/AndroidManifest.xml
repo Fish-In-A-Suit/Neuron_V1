@@ -26,7 +26,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.LoginActivity.NoActionBar" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".AfterGoogleSignUpActivity"></activity>
+        <activity android:name=".AfterGoogleSignUpActivity"
+            android:theme="@style/AppTheme.LoginActivity.NoActionBar"/>
     </application>
 
 </manifest>

@@ -18,4 +18,22 @@ public class StringUtilities {
         }
         return true;
     }
+
+    /**
+     * Splits the source string at spacebar elements (" ") and chooses the n-th element
+     * @param n From 0 to whatever
+     * @param src
+     * @return
+     */
+    public static String choose(int n, String src) {
+        int index = n-1;
+        String[] split = src.split(" ");
+
+        try {
+            return split[index];
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("[Neuron.StringUtilities.choose]: n " + n + " is greater than elements in src: " + src);
+            return "";
+        }
+    }
 }
