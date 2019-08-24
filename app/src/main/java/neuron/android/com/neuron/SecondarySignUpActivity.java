@@ -9,32 +9,39 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import neuron.android.com.neuron.core.Constants;
 import neuron.android.com.neuron.database.DatabaseUser;
 import neuron.android.com.neuron.database.FirestoreManager;
-import neuron.android.com.neuron.registration.googleRegistration.AGSUmanager;
+import neuron.android.com.neuron.registration.googleRegistration.SecondarySignUpManager;
 import neuron.android.com.neuron.tools.ActivityTools;
+import neuron.android.com.neuron.tools.AnimationTools;
 
-public class AfterGoogleSignUpActivity extends AppCompatActivity {
+public class SecondarySignUpActivity extends AppCompatActivity {
     private TextView AGSU_name;
-    private AGSUmanager AGSUmanager;
+    private SecondarySignUpManager SecondarySignUpManager;
 
     private Context activityContext;
+
+    private LinearLayout signUpButton_rootLayout; //used to display the loading animation when signing up a user
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_after_google_sign_up);
+        setContentView(R.layout.activity_secondary_signup);
+
+        signUpButton_rootLayout = (LinearLayout) findViewById(R.id.AGSU_signup_button_root_layout);
 
         activityContext = this;
 
@@ -60,11 +67,44 @@ public class AfterGoogleSignUpActivity extends AppCompatActivity {
 
         Button signUpButton = (Button) findViewById(R.id.AGSU_sign_up_button);
 
-        AGSUmanager = new AGSUmanager(this, incompleteDatabaseUser,
+        SecondarySignUpManager = new SecondarySignUpManager(this, incompleteDatabaseUser,
                 usernameField, passwordField, repeatPasswordField,
                 AGSU_username_error_view, AGSU_password_error_view, AGSU_repeat_password_error_view,
                 AGSU_username_error_report_view, AGSU_password_error_report_view, AGSU_repeat_password_error_report_view,
                 signUpButton);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        System.out.println("[Neuron.AGSUActivity.onDestroy]: here");
+
+        if(Constants.isSignUpInProcess) {
+            //sign up is in process, but this activity is being destroyed --> remove current user from the database
+
+            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if(user!=null) {
+                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        System.out.println("[Neuron.AGSZActivity.onDestroy]: User " + user.getDisplayName() + " successfully deleted from firebase auth!");
+
+                        //here, delete the user from firestore database
+                        FirestoreManager.deleteUser(user.getUid());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        System.out.println("[Neuron.AGSUActivity.onDestroy]: ERRROR deleting user " + user.getDisplayName() + " from firebase auth!");
+                    }
+                });
+            } else {
+                System.out.println("[Neuron.AGSUActivity.onDestroy]: ERROR deleting firebase user. User is not signed in/is null!");
+            }
+        }
+
 
     }
 
@@ -73,20 +113,26 @@ public class AfterGoogleSignUpActivity extends AppCompatActivity {
      * @param view
      */
     public void onClick_AGSU_signUp(View view) {
-        FirestoreManager.saveUserData(AGSUmanager.getDatabaseUser());
+        AnimationTools.startLoadingAnimation(Constants.ANIMATION_CODE_AGSU_LOADING, this, signUpButton_rootLayout, R.style.AGSU_loading_progress_bar);
+
+        FirestoreManager.saveUserData(SecondarySignUpManager.getDatabaseUser());
 
         //add a password-email auth method
-        AuthCredential credential = EmailAuthProvider.getCredential(AGSUmanager.getDatabaseUser().getEmail(), AGSUmanager.getDatabaseUser().getPassword());
+        AuthCredential credential = EmailAuthProvider.getCredential(SecondarySignUpManager.getDatabaseUser().getEmail(), SecondarySignUpManager.getDatabaseUser().getPassword());
         FirebaseAuth.getInstance().getCurrentUser().linkWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    System.out.println("[Neuron.AfterGoogleSignUpActivity.onClick_AGSU_signUp]: link with email credential SUCCESSFUL! User uid = " + task.getResult().getUser().getDisplayName());
+                    System.out.println("[Neuron.SecondarySignUpActivity.onClick_AGSU_signUp]: link with email credential SUCCESSFUL! User uid = " + task.getResult().getUser().getDisplayName());
+                    Constants.isSignUpInProcess = false; //sign up is now finished
                     ActivityTools.startNewActivity(activityContext, MainActivity.class);
                 } else {
-                    System.err.println("[Neuron.AfterGoogleSignUpActivity.onClick_AGSU_signUp]: ERROR: link with email credential FAILED! " + task.getException().getMessage());
+                    System.err.println("[Neuron.SecondarySignUpActivity.onClick_AGSU_signUp]: ERROR: link with email credential FAILED! " + task.getException().getMessage());
                 }
+
+                AnimationTools.stopLoadingAnimation(Constants.ANIMATION_CODE_AGSU_LOADING);
             }
         });
+
     }
 }

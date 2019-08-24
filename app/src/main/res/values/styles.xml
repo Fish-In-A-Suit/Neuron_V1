@@ -15,4 +15,17 @@
         <item name="android:statusBarColor">@color/background</item>
     </style>
 
+    <style name="AGSU_loading_progress_bar" parent="@style/Widget.AppCompat.ProgressBar">
+        <item name="android:minWidth">50dp</item>
+        <item name="android:minHeight">50dp</item>
+    </style>
+
+    <style name="FacebookLoginButtonStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@drawable/com_facebook_button_background</item>
+        <item name="android:layout_gravity">clip_horizontal</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+    </style>
+
 </resources>

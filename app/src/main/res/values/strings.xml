@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Neuron</string>
 
+    <string name="facebook_app_id">2584135774978145</string>
+    <string name="fb_login_protocol_scheme">fb2584135774978145</string>
+
     <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -27,4 +30,6 @@
     <string name="noContentDescription">-</string>
 
     <string name="default_web_client_id_test">218545925409-lnfb36a8jldbihpbbhbifnmv81dm3a1r.apps.googleusercontent.com</string>
+
+    <string name="facebook_signup_button_text">Continue with Facebook</string>
 </resources>

@@ -3,6 +3,8 @@ package neuron.android.com.neuron.database;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -107,6 +109,24 @@ public class FirestoreManager {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 System.out.println("[Neuron.FirestoreManager.addUsedEmail]: Adding " + email + " to used emails is SUCCESSFUL!");
+            }
+        });
+    }
+
+    /**
+     * Deletes all of the user data specified by the uid
+     * @param uid
+     */
+    public static void deleteUser(final String uid) {
+        db.collection(Constants.FIRESTORE_COLLECTION_USER_DATA).document(uid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                System.out.println("[Neuron.FirestoreManager.deleteUser]: User with uid " + uid + " has been deleted successfully.");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                System.out.println("[Neuron.FirestoreManager.deleteUser]: ERROR deleting user with uid " + uid + ". Exception: " + e.getMessage());
             }
         });
     }

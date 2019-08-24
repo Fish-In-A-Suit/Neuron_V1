@@ -70,29 +70,52 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.064">
 
         <LinearLayout
             android:id="@+id/register_social_media_sign_up_buttons"
-            android:layout_width="wrap_content"
+            android:layout_width="260dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="4dp"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="233dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="3dp"
-                android:text="Continue with Facebook" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/register_true_facebook_login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:visibility="invisible"/>
+
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:id="@+id/register_facebook_sign_up_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:onClick="onClick_register_with_facebook"
+                    android:paddingEnd="10dp"
+                    app:fb_defaultColor="#39579B"
+                    app:fb_focusColor="#6183d2"
+                    app:fb_fontIconResource="&#xf230;"
+                    app:fb_fontIconSize="24sp"
+                    app:fb_iconPaddingLeft="2dp"
+                    app:fb_iconPaddingRight="34dp"
+                    app:fb_radius="2dp"
+                    app:fb_text="@string/facebook_signup_button_text"
+                    app:fb_textColor="#ffffff"
+                    app:fb_textFont="@font/roboto_medium"
+                    app:fb_textSize="16sp" />
+            </FrameLayout>
 
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/register_google_sign_up_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign up with Google"
-                />
+                android:text="Sign up with Google" />
         </LinearLayout>
 
         <TextView
@@ -168,12 +191,12 @@
                         android:id="@+id/register_username_error_view"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_error_round_outlined"
-                        android:tint="@color/error"
-                        android:visibility="invisible"
                         android:layout_gravity="center"
                         android:layout_marginEnd="8dp"
-                        android:layout_weight=".0001" />
+                        android:layout_weight=".0001"
+                        android:src="@drawable/ic_error_round_outlined"
+                        android:tint="@color/error"
+                        android:visibility="invisible" />
                 </LinearLayout>
 
                 <TextView
@@ -244,11 +267,11 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight=".0001"
                         android:src="@drawable/ic_error_round_outlined"
                         android:tint="@color/error"
-                        android:visibility="invisible"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight=".0001" />
+                        android:visibility="invisible" />
                 </LinearLayout>
 
                 <TextView
@@ -282,8 +305,8 @@
                     android:id="@+id/register_password_field_linear_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/background_login_field">
+                    android:background="@drawable/background_login_field"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/register_password_icon"
@@ -318,12 +341,12 @@
                         android:id="@+id/register_password_error_view"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_error_round_outlined"
-                        android:tint="@color/error"
-                        android:visibility="invisible"
                         android:layout_gravity="center"
                         android:layout_marginEnd="8dp"
-                        android:layout_weight=".0001" />
+                        android:layout_weight=".0001"
+                        android:src="@drawable/ic_error_round_outlined"
+                        android:tint="@color/error"
+                        android:visibility="invisible" />
                 </LinearLayout>
 
                 <TextView
@@ -358,8 +381,8 @@
                     android:id="@+id/register_repeat_password_field_linear_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:orientation="horizontal"
-                    android:background="@drawable/background_login_field">
+                    android:background="@drawable/background_login_field"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="36dp"
@@ -394,11 +417,11 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight=".0001"
                         android:src="@drawable/ic_error_round_outlined"
                         android:tint="@color/error"
-                        android:visibility="invisible"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight=".0001" />
+                        android:visibility="invisible" />
                 </LinearLayout>
 
                 <TextView

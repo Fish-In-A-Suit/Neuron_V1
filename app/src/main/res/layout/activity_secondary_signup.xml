@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_login_activity"
-    tools:context=".AfterGoogleSignUpActivity">
+    tools:context=".SecondarySignUpActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -284,27 +284,35 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/AGSU_sign_up_button"
+        <LinearLayout
+            android:id="@+id/AGSU_signup_button_root_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/background_login_sign_in_button"
-            android:enabled="false"
-            android:fontFamily="@font/comfortaa"
-            android:onClick="onClick_AGSU_signUp"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:text="@string/signup"
-            android:textColor="@color/login_signin_button_text_color"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_password_field_linear_layout"
-            app:layout_constraintVertical_bias="0.0" />
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <Button
+                android:id="@+id/AGSU_sign_up_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/background_login_sign_in_button"
+                android:enabled="false"
+                android:fontFamily="@font/comfortaa"
+                android:onClick="onClick_AGSU_signUp"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
+                android:text="@string/signup"
+                android:textColor="@color/login_signin_button_text_color"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/login_password_field_linear_layout"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </LinearLayout>
+
 
 
     </LinearLayout>

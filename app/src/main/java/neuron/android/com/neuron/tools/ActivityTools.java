@@ -32,7 +32,7 @@ public class ActivityTools {
     }
 
     /**
-     * This method is used for starting AfterGoogleSignUpActivity for first-time google sign-up-"ees"
+     * This method is used for starting SecondarySignUpActivity for first-time google sign-up-"ees"
      * @param currentContext
      * @param target
      * @param parcelableKey

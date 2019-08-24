@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import neuron.android.com.neuron.R;
+import neuron.android.com.neuron.core.Constants;
 import neuron.android.com.neuron.database.DatabaseUser;
 import neuron.android.com.neuron.registration.defaultRegistration.DefaultRegistrationView;
 import neuron.android.com.neuron.registration.defaultRegistration.RegistrationActivityStateVariables;
@@ -17,9 +18,9 @@ import neuron.android.com.neuron.registration.defaultRegistration.RegistrationPr
 import neuron.android.com.neuron.tools.StringUtilities;
 
 /**
- * This class is responsible for tracking the process of sign up in the AfterGoogleSignUpActivity
+ * This class is responsible for tracking the process of sign up in the SecondarySignUpActivity
  */
-public class AGSUmanager {
+public class SecondarySignUpManager {
     private RegistrationProcess registrationProcess;
 
     private Context activityContext;
@@ -39,11 +40,14 @@ public class AGSUmanager {
 
     private Button signUpButton;
 
-    public AGSUmanager(Context activityContext, DatabaseUser incompleteDbUser,
-                       EditText usernameField, EditText passwordField, EditText repeatPasswordField,
-                       ImageView AGSU_username_error_view, ImageView AGSU_password_error_view, ImageView AGSU_repeat_password_error_view,
-                       TextView AGSU_username_error_report_view, TextView AGSU_password_error_report_view, TextView AGSU_repeat_password_error_report_view,
-                       Button signUpButton) {
+    public SecondarySignUpManager(Context activityContext, DatabaseUser incompleteDbUser,
+                                  EditText usernameField, EditText passwordField, EditText repeatPasswordField,
+                                  ImageView AGSU_username_error_view, ImageView AGSU_password_error_view, ImageView AGSU_repeat_password_error_view,
+                                  TextView AGSU_username_error_report_view, TextView AGSU_password_error_report_view, TextView AGSU_repeat_password_error_report_view,
+                                  Button signUpButton) {
+
+        Constants.isSignUpInProcess = true;
+
         registrationProcess = new RegistrationProcess();
         registrationProcess.setEmailNotAlreadyTaken(true);
 

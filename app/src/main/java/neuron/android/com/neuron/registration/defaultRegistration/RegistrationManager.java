@@ -89,7 +89,6 @@ public class RegistrationManager {
         loadingProgressBar.setScaleY(0.6f);
         loadingProgressBar.setId(Constants.id_register_loading_bar);
         loadingProgressBar.setVisibility(View.INVISIBLE);
-
         //get all of the used user names and emails
         getUsedUsernamesAndEmails();
 

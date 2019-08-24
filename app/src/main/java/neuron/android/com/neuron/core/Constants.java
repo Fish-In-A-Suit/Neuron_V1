@@ -11,10 +11,14 @@ public class Constants {
     public static final String FIRESTORE_USERNAME_TAG = "username"; //each element is stored under "username" ... used when getting usernames back from the database
     public static final String FIRESTORE_EMAIL_TAG = "email";
 
-
     public static final int id_register_loading_bar = 111;
+    public static final int id_AGSU_loading_bar = 112;
     public static final int request_code_google_sign_in = 100;
 
     public static final String PARCELABLE_KEY_INCOMPLETE_DATABASE_USER = "incomplete_db_user";
     public static final String PARCELABLE_KEY_NAME = "name";
+
+    public static final int ANIMATION_CODE_AGSU_LOADING = 1;
+
+    public static boolean isSignUpInProcess = false;
 }

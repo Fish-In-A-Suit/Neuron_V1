@@ -36,6 +36,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-functions:18.1.0'
     implementation 'com.firebase:firebase-client-android:2.3.1'
 
+    implementation 'com.facebook.android:facebook-android-sdk:4.27.0'
+
+    implementation 'com.github.medyo:fancybuttons:1.9.1'
+
     //removed this dependency on 13.08.2019
     //testImplementation 'junit:junit:4.12'
 

@@ -1,6 +1,8 @@
 package neuron.android.com.neuron;
 
+import android.content.Context;
 import android.content.Intent;
+
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +12,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -18,14 +25,16 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import mehdi.sakout.fancybuttons.FancyButton;
 import neuron.android.com.neuron.authentication.AuthenticationManager;
 import neuron.android.com.neuron.core.Constants;
 import neuron.android.com.neuron.core.NeuronActivity;
-import neuron.android.com.neuron.database.DatabaseUser;
 import neuron.android.com.neuron.registration.defaultRegistration.RegistrationManager;
 import neuron.android.com.neuron.signin.SignInUtilities;
 
 public class RegisterActivity extends AppCompatActivity implements NeuronActivity {
+
+    private Context activityContext;
 
     private RegistrationManager registrationManager;
 
@@ -53,10 +62,16 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
 
     private GoogleSignInClient googleSignInClient;
 
+    private CallbackManager facebookCallbackManager;
+    private FancyButton facebookLoginButton;
+    private LoginButton trueFbLoginButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        activityContext = this;
 
         AuthenticationManager.initialize();
         initializeViews();
@@ -71,6 +86,8 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
         initializeListeners();
+
+        setupFacebookSignup();
     }
 
     @Override
@@ -83,12 +100,15 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
             try {
                 //google sign in was successful, authenticate with fireabse
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                SignInUtilities.firebaseAuthWithGoogle(account, this, AfterGoogleSignUpActivity.class);
+                SignInUtilities.firebaseAuthWithGoogle(account, this, SecondarySignUpActivity.class);
             } catch (ApiException e) {
                 //googne sign in failed
                 System.out.println("[Neuron.RegisterActvitiy.onActivityResult]: ERROR! Google Sign In failed! " + task.getException());
             }
         }
+
+        // Pass the activity result back to the Facebook SDK
+        facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -117,6 +137,9 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
         //todo: set google sign in button text
 
         defaultRegistrationRootView = (LinearLayout) findViewById(R.id.register_default_sign_up_linear_layout);
+
+        facebookLoginButton = (FancyButton) findViewById(R.id.register_facebook_sign_up_button);
+        trueFbLoginButton = (LoginButton) findViewById(R.id.register_true_facebook_login_button);
     }
 
     /**
@@ -131,4 +154,42 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
         });
     }
 
+    /**
+     * Configures the facebook login button to log users in with facebook
+     */
+    private void setupFacebookSignup() {
+        facebookCallbackManager = CallbackManager.Factory.create();
+
+        trueFbLoginButton.setReadPermissions("email", "public_profile", "user_friends");
+
+        trueFbLoginButton.registerCallback(facebookCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                System.out.println("[Neuron.RegisterActivity.setupFacebookSignup]: Facebook login successful: " + loginResult);
+                SignInUtilities.handleFacebookAccessToken(loginResult.getAccessToken(), activityContext, SecondarySignUpActivity.class);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                System.out.println("[Neuron.RegisterActivity.setupFacebookSignup]: ERROR while facebook login: " + error);
+                //todo: respond to error
+            }
+        });
+    }
+
+    /**
+     * This method gets called when the fancy facebook button is clicked. It should call the click to the true fb login button
+     * @param view
+     */
+    public void onClick_register_with_facebook(View view) {
+        System.out.println("[Neuron.RegisterActivity.onClick_register_with_facebook]: here");
+        //todo: START FROM HERE! CALL THE CALLBACK TO TRUE FB LOGIN BUTTON!
+
+        trueFbLoginButton.performClick();
+    }
 }

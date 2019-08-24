@@ -5,6 +5,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -67,6 +69,40 @@ public class SignInUtilities {
                     }
                 } else {
                     System.out.println("[Neuron.SignInUtilities.firebaseAuthWithGoogle]: ERROR! Sign in with credential failed. " + task.getException());
+                }
+            }
+        });
+    }
+
+    public static void handleFacebookAccessToken(AccessToken token, final Context activityContext, final Class target) {
+        System.out.println("[Neuron.RegisterActivity.handleFacebookAccessToken]: Handling token: " + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()) {
+                    System.out.println("[Neuron.RegisterActivity.handleFacebookAccessToken]: Facebook sign in successful!");
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                    if(task.getResult().getAdditionalUserInfo().isNewUser()) {
+                        //if is new user, launch SecondarySignUpActivity
+                        System.out.println("[Neuron.RegisterActivity.handleFacebookAccessToken]: User is new. Launching secondary signup actiivty");
+
+                        DatabaseUser incompleteDatabaseUser = new DatabaseUser("", user.getEmail(), "", user.getUid());
+                        String name = StringUtilities.choose(1, user.getDisplayName());
+                        ActivityTools.startNewActivity(activityContext, target, Constants.PARCELABLE_KEY_INCOMPLETE_DATABASE_USER, incompleteDatabaseUser, name);
+
+                    } else {
+                        //not a new user, already registered to db and firebase auth, start main
+                        ActivityTools.startNewActivity(activityContext, MainActivity.class);
+                    }
+
+                    System.out.println("[Neuron.RegisterActivity.handleFacebookAccessToken]: user display name = " + user.getDisplayName() + " | user email = " + user.getEmail());
+
+                    //todo: check if is new user! continue here!
+                } else {
+                    System.out.println("[Neuron.RegisterActivity.handleFacebookAccessToken]: ERROR signing in to facebook! " + task.getException().getMessage() + "\n" + " caused by: " + task.getException().getCause() );
                 }
             }
         });
