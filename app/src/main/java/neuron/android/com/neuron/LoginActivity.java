@@ -25,6 +25,7 @@ import neuron.android.com.neuron.database.FirestoreManager;
 import neuron.android.com.neuron.registration.googleRegistration.GoogleSignInStateManager;
 import neuron.android.com.neuron.tools.ActivityTools;
 import neuron.android.com.neuron.tools.AnimationTools;
+import neuron.android.com.neuron.tools.StringUtilities;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,18 +52,34 @@ public class LoginActivity extends AppCompatActivity {
         //this prints the key hash
             // Add code to print out the key hash
         //todo: remove this later!
-            try {
-                PackageInfo info = getPackageManager().getPackageInfo("neuron.android.com.neuron", PackageManager.GET_SIGNATURES);
-                for (Signature signature : info.signatures) {
-                    MessageDigest md = MessageDigest.getInstance("SHA");
-                    md.update(signature.toByteArray());
-                    Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-                }
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e("KeyHash:", e.toString());
-            } catch (NoSuchAlgorithmException e) {
-                Log.e("KeyHash:", e.toString());
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("neuron.android.com.neuron", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("KeyHash:", e.toString());
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("KeyHash:", e.toString());
+        }
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("neuron.android.com.neuron", PackageManager.GET_SIGNATURES);
+
+            for(Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                md.update(signature.toByteArray());
+                String hash_key_hex = StringUtilities.convertToHex(md.digest());
+                System.out.println("[Neuron.LoginActivity.onCreate]: sha256=" + hash_key_hex);
+            }
+        } catch(PackageManager.NameNotFoundException e) {
+            System.err.println("[Neuron.LoginActivity.onCreate]: " + e.toString());
+        } catch(NoSuchAlgorithmException e) {
+            System.err.println("[Neuron.LoginActivity.onCreate]: " + e.toString());
+        }
+
 
         //check for an existing signed-in user for google
         //todo: ENABLE THIS LATER!!!

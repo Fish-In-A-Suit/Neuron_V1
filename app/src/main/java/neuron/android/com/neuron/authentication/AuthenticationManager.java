@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import neuron.android.com.neuron.database.FirestoreManager;
 import neuron.android.com.neuron.registration.defaultRegistration.RegistrationManager;
 import neuron.android.com.neuron.tools.ActivityTools;
+import neuron.android.com.neuron.verification.EmailVerification;
 
 public class AuthenticationManager {
     private static FirebaseAuth firebaseAuth;
@@ -42,6 +43,9 @@ public class AuthenticationManager {
 
                     if(null!=sourceContext && null!=target) {
                         ActivityTools.startNewActivity(sourceContext, target);
+
+                        //user is always new for createUserWithEmail, always send verification email
+                        EmailVerification.sendVerificationEmail();
                     }
                 } else {
                     System.out.println("[Neuron.AuthenticationManager.authenticateUserWithEmailAndPassword]: Sign up failed: " + task.getException());

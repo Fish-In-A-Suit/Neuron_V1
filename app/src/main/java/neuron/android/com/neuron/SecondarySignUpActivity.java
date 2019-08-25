@@ -21,12 +21,14 @@ import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import neuron.android.com.neuron.authentication.AuthenticationManager;
 import neuron.android.com.neuron.core.Constants;
 import neuron.android.com.neuron.database.DatabaseUser;
 import neuron.android.com.neuron.database.FirestoreManager;
 import neuron.android.com.neuron.registration.googleRegistration.SecondarySignUpManager;
 import neuron.android.com.neuron.tools.ActivityTools;
 import neuron.android.com.neuron.tools.AnimationTools;
+import neuron.android.com.neuron.verification.EmailVerification;
 
 public class SecondarySignUpActivity extends AppCompatActivity {
     private TextView AGSU_name;
@@ -125,6 +127,10 @@ public class SecondarySignUpActivity extends AppCompatActivity {
                 if(task.isSuccessful()) {
                     System.out.println("[Neuron.SecondarySignUpActivity.onClick_AGSU_signUp]: link with email credential SUCCESSFUL! User uid = " + task.getResult().getUser().getDisplayName());
                     Constants.isSignUpInProcess = false; //sign up is now finished
+
+                    //in AGSU user is always new --> send verification email
+                    EmailVerification.sendVerificationEmail();
+
                     ActivityTools.startNewActivity(activityContext, MainActivity.class);
                 } else {
                     System.err.println("[Neuron.SecondarySignUpActivity.onClick_AGSU_signUp]: ERROR: link with email credential FAILED! " + task.getException().getMessage());
