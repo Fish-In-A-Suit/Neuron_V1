@@ -7,11 +7,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 import neuron.android.com.neuron.R;
 import neuron.android.com.neuron.core.Constants;
 import neuron.android.com.neuron.database.DatabaseUser;
+import neuron.android.com.neuron.database.FirestoreManager;
 import neuron.android.com.neuron.registration.defaultRegistration.DefaultRegistrationView;
 import neuron.android.com.neuron.registration.defaultRegistration.RegistrationActivityStateVariables;
 import neuron.android.com.neuron.registration.defaultRegistration.RegistrationProcess;
@@ -38,13 +50,16 @@ public class SecondarySignUpManager {
     private TextView AGSU_password_error_report_view;
     private TextView AGSU_repeat_password_error_report_view;
 
+    private LinearLayout signupRootLinearLayout; //to add the loading bar
+    private ProgressBar loadingProgressBar;
+
     private Button signUpButton;
 
     public SecondarySignUpManager(Context activityContext, DatabaseUser incompleteDbUser,
                                   EditText usernameField, EditText passwordField, EditText repeatPasswordField,
                                   ImageView AGSU_username_error_view, ImageView AGSU_password_error_view, ImageView AGSU_repeat_password_error_view,
                                   TextView AGSU_username_error_report_view, TextView AGSU_password_error_report_view, TextView AGSU_repeat_password_error_report_view,
-                                  Button signUpButton) {
+                                  Button signUpButton, LinearLayout signupRootLinearLayout) {
 
         Constants.isSignUpInProcess = true;
 
@@ -58,6 +73,8 @@ public class SecondarySignUpManager {
         this.passwordField = passwordField;
         this.repeatPasswordField = repeatPasswordField;
 
+        enableUserInputFields(false);
+
         this.AGSU_username_error_view = AGSU_username_error_view;
         this.AGSU_password_error_view = AGSU_password_error_view;
         this.AGSU_repeat_password_error_view = AGSU_repeat_password_error_view;
@@ -67,8 +84,15 @@ public class SecondarySignUpManager {
         this.AGSU_repeat_password_error_report_view = AGSU_repeat_password_error_report_view;
 
         this.signUpButton = signUpButton;
+        this.signupRootLinearLayout = signupRootLinearLayout;
 
-        startAGSUprocess();
+        loadingProgressBar = new ProgressBar(activityContext);
+        loadingProgressBar.setScaleX(0.6f);
+        loadingProgressBar.setScaleX(0.6f);
+        loadingProgressBar.setId(Constants.id_register_loading_bar);
+        loadingProgressBar.setVisibility(View.INVISIBLE);
+
+        getUsedUsernamesAndEmailsAndStartAGSUProcess();
     }
 
     private void startAGSUprocess() {
@@ -361,5 +385,100 @@ public class SecondarySignUpManager {
         dbUser.setUsername(usernameField.getText().toString());
         dbUser.setPassword(passwordField.getText().toString());
         return dbUser;
+    }
+
+    /**
+     * Gets the usernames which have already been used from the database (and stores them inside usedUsernames).
+     * Also, when done querying, it enables the user input fields so that the user can register.
+     * As long as this method is querying usernames, display the loading animation above the root linear layout for default registration.
+     */
+    private void getUsedUsernamesAndEmailsAndStartAGSUProcess() {
+        if(RegistrationActivityStateVariables.getUsedUsernames()!=null && RegistrationActivityStateVariables.getUsedEmails()!=null) {
+            return;
+        }
+
+        startRegistrationLoadingAnimation();
+
+        //query used usernames. when finished, enable the user input fields and stop the animation
+        FirestoreManager.getCollectionReference(Constants.FIRESTORE_COLLECTION_USED_USERNAMES).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    ArrayList<String> usedUsernames = new ArrayList<>();
+
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        String usedUsername = (String) document.getData().get(Constants.FIRESTORE_USERNAME_TAG);
+                        usedUsernames.add(usedUsername);
+                        System.out.println("[Neuron.RegistrationManager.getUsedUsernames]: Added " + usedUsername + " to usedUsernames");
+                    }
+
+                    RegistrationActivityStateVariables.setUsedUsernames(usedUsernames);
+
+                    FirestoreManager.getCollectionReference(Constants.FIRESTORE_COLLECTION_USED_EMAILS).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()) {
+                                ArrayList<String> usedEmails = new ArrayList<>();
+
+                                for(QueryDocumentSnapshot document : task.getResult()) {
+                                    System.out.println("[Neuron.RegistrationManager.getUsedUsernamesAndEmails]: processing " + document.getData());
+
+                                    String usedEmail = (String) document.getData().get(Constants.FIRESTORE_EMAIL_TAG);
+                                    usedEmails.add(usedEmail);
+                                    System.out.println("[Neuron.RegistrationManager.getUsedUsernamesAndEmails]: Added " + usedEmail + " to usedEmails");
+                                }
+
+                                RegistrationActivityStateVariables.setUsedEmails(usedEmails);
+
+                                //stop loading animation
+                                stopRegistrationLoadingAnimation();
+
+                                //enable views
+                                enableUserInputFields(true);
+
+                                //starts the registration process when all of the user names are loaded
+                                startAGSUprocess();
+                            } else {
+                                System.out.println("[Neuron.RegistrationManager.getUsedUsernamesAndEmails]: Error getting documents: " + task.getException());
+                            }
+                        }
+                    });
+
+
+                } else {
+                    System.out.println("[Neuron.RegistrationManager.getUsedUsernames]: Error getting documents: " + task.getException());
+                }
+            }
+        });
+    }
+
+    private void enableUserInputFields(boolean value) {
+        if(value == true) {
+            usernameField.setEnabled(true);
+            passwordField.setEnabled(true);
+            repeatPasswordField.setEnabled(true);
+        } else {
+            usernameField.setEnabled(false);
+            usernameField.setEnabled(false);
+            usernameField.setEnabled(false);
+        }
+    }
+
+    /**
+     * Starts the loading animation which lasts as long as the list of usernames is queried from the database.
+     * It adds the loadingProgressBar to the top of defaultRegistrationRootView and starts the animation.
+     */
+    private void startRegistrationLoadingAnimation() {
+        signupRootLinearLayout.addView(loadingProgressBar, 0); //0 adds the view to the top of the linearlayout
+        loadingProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Stops the loading animation.
+     * It removes the loadingProgressBar from the top of defaultRegistrationRootView and stops the animation
+     */
+    private void stopRegistrationLoadingAnimation() {
+        loadingProgressBar.setVisibility(View.INVISIBLE);
+        signupRootLinearLayout.removeView(loadingProgressBar);
     }
 }

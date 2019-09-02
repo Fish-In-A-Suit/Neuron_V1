@@ -107,4 +107,22 @@ public class SignInUtilities {
             }
         });
     }
+
+    public static void signInWithEmailPass(final Context currentContext, final String email, String password) {
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()) {
+                    System.out.println("[Neuron.SignInUtilities.signInWithEmailPass]: Sign in for " + email + " is succesful.");
+
+                    //start main
+                    ActivityTools.startNewActivity(currentContext, MainActivity.class);
+                } else {
+                    System.out.println("[Neuron.SignInUtilities.signInWithEmailPass]: ERROR! Sign in failed: " + task.getException());
+
+                    //todo: respond!
+                }
+            }
+        });
+    }
 }

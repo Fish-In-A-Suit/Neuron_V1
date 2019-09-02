@@ -68,12 +68,13 @@ public class SecondarySignUpActivity extends AppCompatActivity {
         TextView AGSU_repeat_password_error_report_view = (TextView) findViewById(R.id.AGSU_repeat_password_error_report_view);
 
         Button signUpButton = (Button) findViewById(R.id.AGSU_sign_up_button);
+        LinearLayout signupRootLinearLayout = (LinearLayout) findViewById(R.id.AGSU_root_linear_layout);
 
         SecondarySignUpManager = new SecondarySignUpManager(this, incompleteDatabaseUser,
                 usernameField, passwordField, repeatPasswordField,
                 AGSU_username_error_view, AGSU_password_error_view, AGSU_repeat_password_error_view,
                 AGSU_username_error_report_view, AGSU_password_error_report_view, AGSU_repeat_password_error_report_view,
-                signUpButton);
+                signUpButton, signupRootLinearLayout);
 
     }
 

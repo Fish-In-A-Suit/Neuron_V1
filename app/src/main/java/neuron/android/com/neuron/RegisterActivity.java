@@ -31,6 +31,7 @@ import neuron.android.com.neuron.core.Constants;
 import neuron.android.com.neuron.core.NeuronActivity;
 import neuron.android.com.neuron.registration.defaultRegistration.RegistrationManager;
 import neuron.android.com.neuron.signin.SignInUtilities;
+import neuron.android.com.neuron.tools.ViewUtilities;
 
 public class RegisterActivity extends AppCompatActivity implements NeuronActivity {
 
@@ -134,7 +135,8 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
 
         signUpButton = (Button) findViewById(R.id.register_default_sign_up_button);
         googleSignInButton = (SignInButton) findViewById(R.id.register_google_sign_up_button);
-        //todo: set google sign in button text
+        //DONE: set google sign in button text
+        ViewUtilities.setGoogleButtonText(googleSignInButton, getResources().getString(R.string.sign_in_with_google));
 
         defaultRegistrationRootView = (LinearLayout) findViewById(R.id.register_default_sign_up_linear_layout);
 
