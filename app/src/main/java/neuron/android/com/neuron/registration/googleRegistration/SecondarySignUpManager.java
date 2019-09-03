@@ -27,6 +27,7 @@ import neuron.android.com.neuron.database.FirestoreManager;
 import neuron.android.com.neuron.registration.defaultRegistration.DefaultRegistrationView;
 import neuron.android.com.neuron.registration.defaultRegistration.RegistrationActivityStateVariables;
 import neuron.android.com.neuron.registration.defaultRegistration.RegistrationProcess;
+import neuron.android.com.neuron.tools.AnimationTools;
 import neuron.android.com.neuron.tools.StringUtilities;
 
 /**
@@ -85,12 +86,6 @@ public class SecondarySignUpManager {
 
         this.signUpButton = signUpButton;
         this.signupRootLinearLayout = signupRootLinearLayout;
-
-        loadingProgressBar = new ProgressBar(activityContext);
-        loadingProgressBar.setScaleX(0.6f);
-        loadingProgressBar.setScaleX(0.6f);
-        loadingProgressBar.setId(Constants.id_register_loading_bar);
-        loadingProgressBar.setVisibility(View.INVISIBLE);
 
         getUsedUsernamesAndEmailsAndStartAGSUProcess();
     }
@@ -393,11 +388,8 @@ public class SecondarySignUpManager {
      * As long as this method is querying usernames, display the loading animation above the root linear layout for default registration.
      */
     private void getUsedUsernamesAndEmailsAndStartAGSUProcess() {
-        if(RegistrationActivityStateVariables.getUsedUsernames()!=null && RegistrationActivityStateVariables.getUsedEmails()!=null) {
-            return;
-        }
-
-        startRegistrationLoadingAnimation();
+        //startRegistrationLoadingAnimation();
+        AnimationTools.startLoadingAnimation(Constants.ANIMATION_CODE_AGSU_LOADING, activityContext, signupRootLinearLayout, 0);
 
         //query used usernames. when finished, enable the user input fields and stop the animation
         FirestoreManager.getCollectionReference(Constants.FIRESTORE_COLLECTION_USED_USERNAMES).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -431,7 +423,8 @@ public class SecondarySignUpManager {
                                 RegistrationActivityStateVariables.setUsedEmails(usedEmails);
 
                                 //stop loading animation
-                                stopRegistrationLoadingAnimation();
+                                //stopRegistrationLoadingAnimation();
+                                AnimationTools.stopLoadingAnimation(Constants.ANIMATION_CODE_AGSU_LOADING);
 
                                 //enable views
                                 enableUserInputFields(true);
@@ -454,31 +447,15 @@ public class SecondarySignUpManager {
 
     private void enableUserInputFields(boolean value) {
         if(value == true) {
+            System.out.println("[Neuron.SSUM.enableUserInputFields]: Enabling user input fields.");
             usernameField.setEnabled(true);
             passwordField.setEnabled(true);
             repeatPasswordField.setEnabled(true);
         } else {
+            System.out.println("[Neuron.SSUM.enableUserInputFields]: Disabling user input fields.");
             usernameField.setEnabled(false);
             usernameField.setEnabled(false);
             usernameField.setEnabled(false);
         }
-    }
-
-    /**
-     * Starts the loading animation which lasts as long as the list of usernames is queried from the database.
-     * It adds the loadingProgressBar to the top of defaultRegistrationRootView and starts the animation.
-     */
-    private void startRegistrationLoadingAnimation() {
-        signupRootLinearLayout.addView(loadingProgressBar, 0); //0 adds the view to the top of the linearlayout
-        loadingProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Stops the loading animation.
-     * It removes the loadingProgressBar from the top of defaultRegistrationRootView and stops the animation
-     */
-    private void stopRegistrationLoadingAnimation() {
-        loadingProgressBar.setVisibility(View.INVISIBLE);
-        signupRootLinearLayout.removeView(loadingProgressBar);
     }
 }

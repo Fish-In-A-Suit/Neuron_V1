@@ -18,7 +18,7 @@ import neuron.android.com.neuron.verification.EmailVerification;
 public class AuthenticationManager {
     private static FirebaseAuth firebaseAuth;
 
-    public static void initialize() {
+    public static void init() {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
@@ -83,5 +83,9 @@ public class AuthenticationManager {
      */
     public static FirebaseUser getCurrentUser() {
         return firebaseAuth.getCurrentUser();
+    }
+
+    public static FirebaseAuth getAuth() {
+        return firebaseAuth;
     }
 }

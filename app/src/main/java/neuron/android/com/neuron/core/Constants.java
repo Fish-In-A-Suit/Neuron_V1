@@ -21,4 +21,7 @@ public class Constants {
     public static final int ANIMATION_CODE_AGSU_LOADING = 1;
 
     public static boolean isSignUpInProcess = false;
+
+    public static boolean isPrimarySignUpInProcess = false;
+    public static boolean isSecondarySignUpInProcess = false;
 }

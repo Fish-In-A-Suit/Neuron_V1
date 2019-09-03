@@ -5,14 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,17 +32,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import mehdi.sakout.fancybuttons.FancyButton;
+import neuron.android.com.neuron.authentication.AuthenticationManager;
 import neuron.android.com.neuron.core.Constants;
 import neuron.android.com.neuron.core.NeuronActivity;
+import neuron.android.com.neuron.core.ProtectSignupTermination;
+import neuron.android.com.neuron.core.SignupType;
 import neuron.android.com.neuron.database.DatabaseUser;
 import neuron.android.com.neuron.database.FirestoreManager;
+import neuron.android.com.neuron.registration.facebookRegistration.FacebookSignInStateManager;
 import neuron.android.com.neuron.registration.googleRegistration.GoogleSignInStateManager;
 import neuron.android.com.neuron.signin.SignInUtilities;
 import neuron.android.com.neuron.tools.ActivityTools;
@@ -55,7 +49,7 @@ import neuron.android.com.neuron.tools.AnimationTools;
 import neuron.android.com.neuron.tools.StringUtilities;
 import neuron.android.com.neuron.tools.ViewUtilities;
 
-public class LoginActivity extends AppCompatActivity implements NeuronActivity {
+public class LoginActivity extends AppCompatActivity implements NeuronActivity, ProtectSignupTermination {
     private Context activityContext;
 
     private boolean isEmailFieldEmpty;
@@ -88,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements NeuronActivity {
 
         FirestoreManager.init();
         AnimationTools.init();
+        AuthenticationManager.init();
 
         //configure google sign in request
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
@@ -171,6 +166,7 @@ public class LoginActivity extends AppCompatActivity implements NeuronActivity {
             try {
                 //google sign in was successful, authenticate with fireabse
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                GoogleSignInStateManager.setGoogleSignInAccount(account);
                 SignInUtilities.firebaseAuthWithGoogle(account, this, SecondarySignUpActivity.class);
             } catch (ApiException e) {
                 //googne sign in failed
@@ -183,21 +179,18 @@ public class LoginActivity extends AppCompatActivity implements NeuronActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+        System.out.println("[Neuron.LoginActivity.onStop]: here");
+        ProtectSignupTermination.tryToDestroySignUpClient(SignupType.PRIMARY);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        if(GoogleSignInStateManager.getGoogleSignInClient()!=null) {
-            //todo: remove this later
-            //signs out the current google sign in client
-            GoogleSignInStateManager.getGoogleSignInClient().signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    System.out.println("[Neuron.LoginActivity.onDestroy]: Successfully signed out google sign in client");
-                }
-            });
-
-        }
-
+        //todo: remove this later
         System.out.println("[Neuron.LoginActivity.onDestroy]: Logging out of facebook");
         LoginManager.getInstance().logOut();
     }
@@ -307,7 +300,9 @@ public class LoginActivity extends AppCompatActivity implements NeuronActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 System.out.println("[Neuron.LoginActivity.setupFacebookButton]: facebook:onSuccess: " + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
+                AccessToken token = loginResult.getAccessToken();
+                FacebookSignInStateManager.setAccessToken(token);
+                handleFacebookAccessToken(token);
             }
 
             @Override
@@ -326,7 +321,7 @@ public class LoginActivity extends AppCompatActivity implements NeuronActivity {
         System.out.println("[Neuron.LoginActiivty.handleFacebookAccessToken]: " + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        AuthenticationManager.getAuth().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
@@ -334,7 +329,7 @@ public class LoginActivity extends AppCompatActivity implements NeuronActivity {
                     System.out.println("[Neuron.LoginAActivity.handleFacebookAccessToken]: Sign in with facebook successful!");
 
                     if(task.getResult().getAdditionalUserInfo().isNewUser()) {
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        FirebaseUser user = AuthenticationManager.getCurrentUser();
                         DatabaseUser incompleteDatabaseUser = new DatabaseUser("", user.getEmail(), "", user.getUid());
                         String name = StringUtilities.choose(1, user.getDisplayName());
                         ActivityTools.startNewActivity(activityContext, SecondarySignUpActivity.class, Constants.PARCELABLE_KEY_INCOMPLETE_DATABASE_USER, incompleteDatabaseUser, name);

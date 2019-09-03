@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -26,14 +27,17 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 import mehdi.sakout.fancybuttons.FancyButton;
-import neuron.android.com.neuron.authentication.AuthenticationManager;
 import neuron.android.com.neuron.core.Constants;
 import neuron.android.com.neuron.core.NeuronActivity;
+import neuron.android.com.neuron.core.ProtectSignupTermination;
+import neuron.android.com.neuron.core.SignupType;
 import neuron.android.com.neuron.registration.defaultRegistration.RegistrationManager;
+import neuron.android.com.neuron.registration.facebookRegistration.FacebookSignInStateManager;
+import neuron.android.com.neuron.registration.googleRegistration.GoogleSignInStateManager;
 import neuron.android.com.neuron.signin.SignInUtilities;
 import neuron.android.com.neuron.tools.ViewUtilities;
 
-public class RegisterActivity extends AppCompatActivity implements NeuronActivity {
+public class RegisterActivity extends AppCompatActivity implements NeuronActivity, ProtectSignupTermination {
 
     private Context activityContext;
 
@@ -74,7 +78,6 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
 
         activityContext = this;
 
-        AuthenticationManager.initialize();
         initializeViews();
 
         registrationManager = new RegistrationManager(this, editText_username, editText_email, editText_password, editText_repeatPassword,
@@ -89,6 +92,8 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
         initializeListeners();
 
         setupFacebookSignup();
+
+        Constants.isPrimarySignUpInProcess = true;
     }
 
     @Override
@@ -101,6 +106,7 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
             try {
                 //google sign in was successful, authenticate with fireabse
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                GoogleSignInStateManager.setGoogleSignInAccount(account);
                 SignInUtilities.firebaseAuthWithGoogle(account, this, SecondarySignUpActivity.class);
             } catch (ApiException e) {
                 //googne sign in failed
@@ -110,7 +116,14 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
 
         // Pass the activity result back to the Facebook SDK
         facebookCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        System.out.println("[Neuron.RegisterActivity.onStop]: here");
+        ProtectSignupTermination.tryToDestroySignUpClient(SignupType.PRIMARY);
     }
 
     public void onClick_default_signUp(View v) {
@@ -168,7 +181,9 @@ public class RegisterActivity extends AppCompatActivity implements NeuronActivit
             @Override
             public void onSuccess(LoginResult loginResult) {
                 System.out.println("[Neuron.RegisterActivity.setupFacebookSignup]: Facebook login successful: " + loginResult);
-                SignInUtilities.handleFacebookAccessToken(loginResult.getAccessToken(), activityContext, SecondarySignUpActivity.class);
+                AccessToken token = loginResult.getAccessToken();
+                FacebookSignInStateManager.setAccessToken(token);
+                SignInUtilities.handleFacebookAccessToken(token, activityContext, SecondarySignUpActivity.class);
             }
 
             @Override

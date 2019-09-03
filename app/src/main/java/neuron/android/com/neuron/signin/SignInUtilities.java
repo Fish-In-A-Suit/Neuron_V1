@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.facebook.AccessToken;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import neuron.android.com.neuron.MainActivity;
 import neuron.android.com.neuron.R;
+import neuron.android.com.neuron.authentication.AuthenticationManager;
 import neuron.android.com.neuron.core.Constants;
 import neuron.android.com.neuron.database.DatabaseUser;
 import neuron.android.com.neuron.registration.googleRegistration.GoogleSignInStateManager;
@@ -46,6 +48,12 @@ public class SignInUtilities {
         return null;
     }
 
+    /**
+     * This method authenticates the user and starts the target activity if the user is new and the main activity if the user is not new
+     * @param googleSignInAccount
+     * @param currentContext
+     * @param target
+     */
     public static void firebaseAuthWithGoogle(final GoogleSignInAccount googleSignInAccount, final Context currentContext, final Class target) {
         System.out.println("[Neuron.SignInUtilities.firebaseAuthWithGoogle]: googleSignInAccount id: " + googleSignInAccount.getId());
 
@@ -69,6 +77,29 @@ public class SignInUtilities {
                     }
                 } else {
                     System.out.println("[Neuron.SignInUtilities.firebaseAuthWithGoogle]: ERROR! Sign in with credential failed. " + task.getException());
+                }
+            }
+        });
+    }
+
+    /**
+     * This method authenticates a user and does nothing else. This method is used when the SSUA is resumed after being stopped
+     * @param googleSignInAccount
+     */
+    public static void firebaseAuthWithGoogle(final GoogleSignInAccount googleSignInAccount) {
+        System.out.println("[Neuron.SignInUtilities.firebaseAuthWithGoogle]: Authintication with google. googleSignInAccount id: " + googleSignInAccount.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(googleSignInAccount.getIdToken(), null);
+        AuthenticationManager.getAuth().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()) {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    //todo: remove later if this call to get the user won't be needed
+                    System.out.println("[Neuron.SignInUtilities.firebaseAuthWithGoogle]: Auth successful for " + user.getEmail());
+
+                } else {
+                    System.out.println("[Neuron.SignInUtilities.firebaseAuthWithGoogle]: Auth not successful! " + task.getException().getMessage());
                 }
             }
         });
@@ -103,6 +134,21 @@ public class SignInUtilities {
                     //todo: check if is new user! continue here!
                 } else {
                     System.out.println("[Neuron.RegisterActivity.handleFacebookAccessToken]: ERROR signing in to facebook! " + task.getException().getMessage() + "\n" + " caused by: " + task.getException().getCause() );
+                }
+            }
+        });
+    }
+
+    public static void handleFacebookAccessToken(AccessToken token) {
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        AuthenticationManager.getAuth().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()) {
+                    System.out.println("[Neuron.RegisterActivity.handleFacebookAccessToken]: Facebook sign in successful!");
+                    FirebaseUser user = AuthenticationManager.getCurrentUser(); //todo: remove this method call later if obsolete
+                } else {
+                    System.out.println("[Neuron.RegisterActivity.handleFacebookAccessToken]: Facebook sign in FAILED! " + task.getException().getMessage());
                 }
             }
         });

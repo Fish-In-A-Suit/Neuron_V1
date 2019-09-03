@@ -13,16 +13,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import neuron.android.com.neuron.authentication.AuthenticationManager;
 import neuron.android.com.neuron.core.Constants;
+import neuron.android.com.neuron.core.ProtectSignupTermination;
+import neuron.android.com.neuron.core.SignupMethod;
+import neuron.android.com.neuron.core.SignupType;
+import neuron.android.com.neuron.core.TerminatedSnapshotManager;
 import neuron.android.com.neuron.database.DatabaseUser;
 import neuron.android.com.neuron.database.FirestoreManager;
 import neuron.android.com.neuron.registration.googleRegistration.SecondarySignUpManager;
@@ -30,7 +31,7 @@ import neuron.android.com.neuron.tools.ActivityTools;
 import neuron.android.com.neuron.tools.AnimationTools;
 import neuron.android.com.neuron.verification.EmailVerification;
 
-public class SecondarySignUpActivity extends AppCompatActivity {
+public class SecondarySignUpActivity extends AppCompatActivity implements ProtectSignupTermination {
     private TextView AGSU_name;
     private SecondarySignUpManager SecondarySignUpManager;
 
@@ -76,39 +77,29 @@ public class SecondarySignUpActivity extends AppCompatActivity {
                 AGSU_username_error_report_view, AGSU_password_error_report_view, AGSU_repeat_password_error_report_view,
                 signUpButton, signupRootLinearLayout);
 
+        Constants.isSecondarySignUpInProcess = true;
+
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        System.out.println("[Neuron.AGSUActivity.onDestroy]: here");
+    protected void  onStop() {
+        super.onStop();
 
-        if(Constants.isSignUpInProcess) {
-            //sign up is in process, but this activity is being destroyed --> remove current user from the database
+        System.out.println("[Neuron.SSUA.onStop]: here");
+        ProtectSignupTermination.tryToDestroySignUpClient(SignupType.SECONDARY);
+    }
 
-            final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-            if(user!=null) {
-                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        System.out.println("[Neuron.AGSZActivity.onDestroy]: User " + user.getDisplayName() + " successfully deleted from firebase auth!");
-
-                        //here, delete the user from firestore database
-                        FirestoreManager.deleteUser(user.getUid());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.out.println("[Neuron.AGSUActivity.onDestroy]: ERRROR deleting user " + user.getDisplayName() + " from firebase auth!");
-                    }
-                });
-            } else {
-                System.out.println("[Neuron.AGSUActivity.onDestroy]: ERROR deleting firebase user. User is not signed in/is null!");
-            }
+        System.out.println("[Neuron.SSUA.onResume]: here");
+        if(TerminatedSnapshotManager.getSecondarySignupTerminatedSnapshot()!=null) {
+            System.out.println("[Neuron.SSUA.onResume]: Terminated snapshot exists. Trying to restore it.");
+            TerminatedSnapshotManager.getSecondarySignupTerminatedSnapshot().restore();
+        } else {
+            System.out.println("[Neuron.SSUA.onResume]: Terminated snapshot DOESN'T exist!");
         }
-
-
     }
 
     /**
@@ -122,7 +113,7 @@ public class SecondarySignUpActivity extends AppCompatActivity {
 
         //add a password-email auth method
         AuthCredential credential = EmailAuthProvider.getCredential(SecondarySignUpManager.getDatabaseUser().getEmail(), SecondarySignUpManager.getDatabaseUser().getPassword());
-        FirebaseAuth.getInstance().getCurrentUser().linkWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        AuthenticationManager.getCurrentUser().linkWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
@@ -131,6 +122,8 @@ public class SecondarySignUpActivity extends AppCompatActivity {
 
                     //in AGSU user is always new --> send verification email
                     EmailVerification.sendVerificationEmail();
+
+                    Constants.isSecondarySignUpInProcess = false; //end of secondary sign up process
 
                     ActivityTools.startNewActivity(activityContext, MainActivity.class);
                 } else {

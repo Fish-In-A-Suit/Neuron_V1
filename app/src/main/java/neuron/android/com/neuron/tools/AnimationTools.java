@@ -54,7 +54,7 @@ public class AnimationTools {
         progressBar.setId(Constants.id_AGSU_loading_bar);
         progressBar.setVisibility(View.INVISIBLE);
 
-        rootLayout.addView(progressBar);
+        rootLayout.addView(progressBar, 0);
         progressBar.setVisibility(View.VISIBLE);
 
         HashMap<ProgressBar, LinearLayout> temp = new HashMap<>();
