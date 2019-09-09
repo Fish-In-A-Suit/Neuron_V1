@@ -20,10 +20,9 @@ import com.google.firebase.auth.EmailAuthProvider;
 
 import neuron.android.com.neuron.authentication.AuthenticationManager;
 import neuron.android.com.neuron.core.Constants;
-import neuron.android.com.neuron.core.ProtectSignupTermination;
-import neuron.android.com.neuron.core.SignupMethod;
+import neuron.android.com.neuron.termination.ProtectSignupTermination;
 import neuron.android.com.neuron.core.SignupType;
-import neuron.android.com.neuron.core.TerminatedSnapshotManager;
+import neuron.android.com.neuron.termination.TerminatedSnapshotManager;
 import neuron.android.com.neuron.database.DatabaseUser;
 import neuron.android.com.neuron.database.FirestoreManager;
 import neuron.android.com.neuron.registration.googleRegistration.SecondarySignUpManager;

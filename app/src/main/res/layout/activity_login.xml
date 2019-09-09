@@ -226,6 +226,7 @@
 
                 <mehdi.sakout.fancybuttons.FancyButton
                     android:id="@+id/login_facebook_sign_in_button"
+                    android:clickable="true"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginStart="4dp"
@@ -243,7 +244,7 @@
                     app:fb_text="@string/facebook"
                     app:fb_textColor="#ffffff"
                     app:fb_textFont="@font/roboto_medium"
-                    app:fb_textSize="16sp" />
+                    app:fb_textSize="14sp" />
 
             </FrameLayout>
 

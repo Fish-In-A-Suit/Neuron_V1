@@ -1,9 +1,10 @@
-package neuron.android.com.neuron.core;
+package neuron.android.com.neuron.termination;
 
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.FirebaseUser;
 
+import neuron.android.com.neuron.core.SignupMethod;
 import neuron.android.com.neuron.registration.facebookRegistration.FacebookSignInStateManager;
 import neuron.android.com.neuron.signin.SignInUtilities;
 

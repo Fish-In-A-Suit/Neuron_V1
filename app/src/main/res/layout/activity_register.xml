@@ -82,33 +82,38 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="44dp">
 
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/register_true_facebook_login_button"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="44dp"
                     android:visibility="invisible"/>
 
-                <mehdi.sakout.fancybuttons.FancyButton
-                    android:id="@+id/register_facebook_sign_up_button"
+                <com.android.neuron.custombuttons.FacebookCustomButton
+                    android:id="@+id/register_facebook_signup_button"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginStart="4dp"
+                    android:background="@drawable/background_facebook_sign_up_button"
                     android:layout_marginEnd="4dp"
-                    android:onClick="onClick_register_with_facebook"
-                    android:paddingEnd="10dp"
-                    app:fb_defaultColor="#39579B"
-                    app:fb_focusColor="#6183d2"
-                    app:fb_fontIconResource="&#xf230;"
-                    app:fb_fontIconSize="24sp"
-                    app:fb_iconPaddingLeft="2dp"
-                    app:fb_iconPaddingRight="34dp"
-                    app:fb_radius="2dp"
-                    app:fb_text="@string/facebook_signup_button_text"
-                    app:fb_textColor="#ffffff"
-                    app:fb_textFont="@font/roboto_medium"
-                    app:fb_textSize="16sp" />
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="4dp"
+                    app:icon_resource="@drawable/ic_fb_white"
+                    app:icon_width="24dp"
+                    app:icon_height="24dp"
+                    app:icon_gravity="center"
+                    app:icon_marginBottom="0dp"
+                    app:icon_marginStart="8dp"
+                    app:icon_marginEnd="42dp"
+                    app:icon_marginTop="0dp"
+                    app:text_source="@string/facebook_signup_button_text"
+                    app:text_gravity="center"
+                    app:text_marginEnd="32dp"
+                    app:text_font="@font/roboto_medium"
+                    app:text_color="@color/white"
+                    app:text_size="14sp" />
+
             </FrameLayout>
 
             <com.google.android.gms.common.SignInButton

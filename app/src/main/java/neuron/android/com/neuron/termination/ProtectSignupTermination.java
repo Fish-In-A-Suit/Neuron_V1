@@ -1,4 +1,4 @@
-package neuron.android.com.neuron.core;
+package neuron.android.com.neuron.termination;
 
 import androidx.annotation.NonNull;
 
@@ -10,9 +10,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import neuron.android.com.neuron.authentication.AuthenticationManager;
+import neuron.android.com.neuron.core.Constants;
+import neuron.android.com.neuron.core.SignupType;
 import neuron.android.com.neuron.database.FirestoreManager;
 import neuron.android.com.neuron.registration.facebookRegistration.FacebookSignInStateManager;
 import neuron.android.com.neuron.registration.googleRegistration.GoogleSignInStateManager;
+import neuron.android.com.neuron.termination.SecondarySignupTerminatedSnapshot;
+import neuron.android.com.neuron.termination.TerminatedSnapshotManager;
 
 /**
  * The user can decide to quit the application during the process of signup. Therefore, all of the activites which give the user

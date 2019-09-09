@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FacebookCustomButton">
+        <!-- Default Android attrs -->
+        <attr name="android:enabled" />
+        <attr name="android:text" />
+        <attr name="android:textSize" />
+        <attr name="android:textAllCaps" />
+        <attr name="android:textStyle" />
+        <attr name="android:fontFamily" />
+
+        <attr name="icon_width" format="dimension"/>
+        <attr name="icon_height" format="dimension"/>
+
+        <attr name="icon_gravity" format="enum">
+            <enum name="top" value="0x30" />
+            <enum name="bottom" value="0x50" />
+            <enum name="left" value="0x03" />
+            <enum name="right" value="0x05" />
+            <enum name="center_vertical" value="0x10" />
+            <enum name="fill_vertical" value="0x70" />
+            <enum name="center_horizontal" value="0x01" />
+            <enum name="fill_horizontal" value="0x07" />
+            <enum name="center" value="0x11" />
+            <enum name="fill" value="0x77" />
+            <enum name="clip_vertical" value="0x80" />
+            <enum name="clip_horizontal" value="0x08" />
+            <enum name="start" value="0x00800003" />
+            <enum name="end" value="0x00800005" />
+        </attr>
+
+        <attr name="icon_resource" format="integer"/>
+
+        <attr name="icon_marginStart" format="dimension"/>
+        <attr name="icon_marginEnd" format="dimension"/>
+        <attr name="icon_marginTop" format="dimension"/>
+        <attr name="icon_marginBottom" format="dimension"/>
+
+        <attr name="text_source" format="string"/>
+
+        <attr name="text_gravity" format="enum">
+            <enum name="top" value="0x30" />
+            <enum name="bottom" value="0x50" />
+            <enum name="left" value="0x03" />
+            <enum name="right" value="0x05" />
+            <enum name="center_vertical" value="0x10" />
+            <enum name="fill_vertical" value="0x70" />
+            <enum name="center_horizontal" value="0x01" />
+            <enum name="fill_horizontal" value="0x07" />
+            <enum name="center" value="0x11" />
+            <enum name="fill" value="0x77" />
+            <enum name="clip_vertical" value="0x80" />
+            <enum name="clip_horizontal" value="0x08" />
+            <enum name="start" value="0x00800003" />
+            <enum name="end" value="0x00800005" />
+        </attr>
+
+        <attr name="text_size" format="dimension"/>
+        <attr name="text_font" format="string"/>
+        <attr name="text_color" format="color"/>
+
+        <attr name="text_marginStart" format="dimension"/>
+        <attr name="text_marginTop" format="dimension"/>
+        <attr name="text_marginEnd" format="dimension"/>
+        <attr name="text_marginBottom" format="dimension"/>
+    </declare-styleable>
+</resources>

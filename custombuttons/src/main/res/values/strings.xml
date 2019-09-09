@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CustomButtons</string>
+
+    <string name="fbButton_default_text_source">Continue with Facebook</string>
+</resources>

@@ -1,4 +1,4 @@
-package neuron.android.com.neuron.core;
+package neuron.android.com.neuron.termination;
 
 /**
  * Manages the terminated snapshots

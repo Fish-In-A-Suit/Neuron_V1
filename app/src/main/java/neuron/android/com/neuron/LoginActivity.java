@@ -37,7 +37,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 import neuron.android.com.neuron.authentication.AuthenticationManager;
 import neuron.android.com.neuron.core.Constants;
 import neuron.android.com.neuron.core.NeuronActivity;
-import neuron.android.com.neuron.core.ProtectSignupTermination;
+import neuron.android.com.neuron.termination.ProtectSignupTermination;
 import neuron.android.com.neuron.core.SignupType;
 import neuron.android.com.neuron.database.DatabaseUser;
 import neuron.android.com.neuron.database.FirestoreManager;
@@ -315,6 +315,8 @@ public class LoginActivity extends AppCompatActivity implements NeuronActivity, 
 
             }
         });
+
+        fancyFacebookSignInButton.setCustomTextFont(R.font.roboto_medium);
     }
 
     private void handleFacebookAccessToken(AccessToken token) {

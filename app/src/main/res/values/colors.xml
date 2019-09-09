@@ -26,4 +26,7 @@
     <color name="login_signin_button_text_color">#7507100E</color>
 
     <color name="register_linedivider">#22FFDA</color>
+
+    <color name="fb_defaultColor">#39579B</color>
+    <color name="fb_clickedColor">#355294</color>
 </resources>

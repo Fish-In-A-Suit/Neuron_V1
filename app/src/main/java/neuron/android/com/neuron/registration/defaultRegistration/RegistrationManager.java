@@ -561,6 +561,9 @@ public class RegistrationManager {
 
     public static void showMalformedEmailError() {
         email_error_view.setVisibility(View.VISIBLE);
+
+        //todo: make the text of the error view correspond to the text thrown by the firebase auth exception
+        //For example, this error might also occur: [Neuron.AuthenticationManager.authenticateUserWithEmailAndPassword]: Sign up failed: com.google.firebase.auth.FirebaseAuthUserCollisionException: The email address is already in use by another account.
         email_error_report_view.setText(activityContext.getResources().getString(R.string.registration_default_email_does_not_exist));
     }
 }

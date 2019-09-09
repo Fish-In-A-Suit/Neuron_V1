@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="fb_defaultColor">#39579B</color>
+    <color name="fb_clickedColor">#355294</color>
+    <color name="white">#ffffff</color>
+</resources>
