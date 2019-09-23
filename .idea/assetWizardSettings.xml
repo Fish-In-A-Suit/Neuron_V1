@@ -15,8 +15,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="autoMirrored" value="true" />
-                            <entry key="outputName" value="ic_fb_white" />
-                            <entry key="sourceFile" value="F:\Graphics\AdobeAI\finalised\fb_icon_white192x192.svg" />
+                            <entry key="outputName" value="ic_posts_full" />
+                            <entry key="sourceFile" value="F:\Android_Development\Neuron_res\icons\posts_full.svg" />
                           </map>
                         </option>
                       </PersistentState>

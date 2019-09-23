@@ -28,4 +28,9 @@
         <item name="android:paddingBottom">10dp</item>
     </style>
 
+    <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicator">@null</item>
+        <item name="tabRippleColor">@color/background</item>
+    </style>
+
 </resources>
